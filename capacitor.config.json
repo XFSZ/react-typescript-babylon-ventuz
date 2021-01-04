@@ -2,12 +2,16 @@
   "appId": "io.ionic.starter",
   "appName": "mytestReactApp",
   "bundledWebRuntime": false,
-  "npmClient": "npm",
+  "npmClient": "yarn",
   "webDir": "build",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0
     }
   },
-  "cordova": {}
+  "cordova": {},
+  "server": {
+    "url": "http://localhost:8100",
+    "cleartext": true
+  }
 }
