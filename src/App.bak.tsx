@@ -1,4 +1,4 @@
-import React, {useState,useEffect,useContext} from 'react';
+import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
@@ -10,8 +10,6 @@ import {
   IonTabs
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import WebSocketServer from './utils/WebSocketTool';
-import {WebSocketServerContext} from './utils/ConstContext';
 import { ellipse, square, triangle } from 'ionicons/icons';
 import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
@@ -36,17 +34,8 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC<{}> = () =>{
- // const webSocketServerContext = useContext(WebSocketServerContext)
-  const [webSocketServer , setWebSocketServer] = useState({} as WebSocketServer);
-useEffect(()=>{
-const socket = new WebSocketServer("192.168.0.11","4649")
-setWebSocketServer(socket)
-},[])
- return (
-   <div>
-   <WebSocketServerContext.Provider value={webSocketServer}>
-   <IonApp>
+const App: React.FC = () => (
+  <IonApp>
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
@@ -72,9 +61,6 @@ setWebSocketServer(socket)
       </IonTabs>
     </IonReactRouter>
   </IonApp>
-  </WebSocketServerContext.Provider>
-   </div>
- )
-};
+);
 
 export default App;
