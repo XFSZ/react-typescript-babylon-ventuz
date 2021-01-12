@@ -1171,11 +1171,28 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@babylonjs/core@^4.2.0":
+"@babylonjs/core@4.2.0", "@babylonjs/core@^4.2.0":
   version "4.2.0"
   resolved "https://registry.npm.taobao.org/@babylonjs/core/download/@babylonjs/core-4.2.0.tgz#d1cfd43d7e3d2e58cde79083f04eeb607f6c8f18"
   integrity sha1-0c/UPX49LljN55CD8E7rYH9sjxg=
   dependencies:
+    tslib ">=1.10.0"
+
+"@babylonjs/gui@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.npm.taobao.org/@babylonjs/gui/download/@babylonjs/gui-4.2.0.tgz#c2a35ca6724759731fe0c4ddbfe2490301847f93"
+  integrity sha1-wqNcpnJHWXMf4MTdv+JJAwGEf5M=
+  dependencies:
+    "@babylonjs/core" "4.2.0"
+    tslib ">=1.10.0"
+
+"@babylonjs/loaders@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.npm.taobao.org/@babylonjs/loaders/download/@babylonjs/loaders-4.2.0.tgz#a9902dc277c16dcd22cd1907f86310e211c247cb"
+  integrity sha1-qZAtwnfBbc0izRkH+GMQ4hHCR8s=
+  dependencies:
+    "@babylonjs/core" "4.2.0"
+    babylonjs-gltf2interface "4.2.0"
     tslib ">=1.10.0"
 
 "@capacitor/android@^2.4.2":
@@ -2598,6 +2615,11 @@ babylon@^6.18.0:
   version "6.18.0"
   resolved "https://registry.npm.taobao.org/babylon/download/babylon-6.18.0.tgz#af2f3b88fa6f5c1e4c634d1a0f8eac4f55b395e3"
   integrity sha1-ry87iPpvXB5MY00aD46sT1WzleM=
+
+babylonjs-gltf2interface@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.npm.taobao.org/babylonjs-gltf2interface/download/babylonjs-gltf2interface-4.2.0.tgz#b0ef1e11e3574cf2c6f573d0c5c34857a2a7b322"
+  integrity sha1-sO8eEeNXTPLG9XPQxcNIV6KnsyI=
 
 babylonjs-hook@^0.0.9:
   version "0.0.9"

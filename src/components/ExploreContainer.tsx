@@ -1,11 +1,12 @@
-import React, { useEffect, useContext } from "react";
-//import React from 'react';
+import React, { useEffect,useRef, useCallback,useContext } from "react";
+
 import "./ExploreContainer.css";
-//import WebSocketServer from "../utils/WebSocketTool";
 import { WebSocketServerContext } from "../utils/ConstContext";
+import BabylonScene from './BabylonSceneComponents/index'
 interface ContainerProps {
   name: string;
 }
+
 
 const ExploreContainer: React.FC<ContainerProps> = ({ name }) => {
   const context = useContext(WebSocketServerContext);
@@ -16,9 +17,13 @@ const ExploreContainer: React.FC<ContainerProps> = ({ name }) => {
       context.sendMessage("hello",{btnEvent:1})
     }
   };
+
+
+
   return (
     <div className="container">
-      {/* <strong >{name}</strong> */}
+
+     <BabylonScene />
       <strong onClick={onHandleClick}>{name}</strong>
       <p>
         Explore{" "}

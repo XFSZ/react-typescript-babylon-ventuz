@@ -99,4 +99,5 @@ ButtonName:ButtonName
 TransData:TransData
 }
 
+git remote add origin http://192.168.0.7:3000/myowngitea/React-Websocket-AndroidApp.git
 ```
