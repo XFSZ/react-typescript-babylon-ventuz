@@ -1,9 +1,9 @@
 import React from 'react';
 import { ArcRotateCamera, Vector3, HemisphericLight, MeshBuilder,SceneLoader } from '@babylonjs/core';
 import "@babylonjs/loaders/glTF";
-import BabylonScene from './BabylonScene'; // uses above component in same directory
-// import SceneComponent from 'babylonjs-hook'; // if you install 'babylonjs-hook' NPM.
-
+import './index.css'
+// import SceneComponent from 'babylonjs-hook';
+import BabylonScene from './BabylonScene'
 let box:any;
 let camera:any;
 const onSceneReady = (scene:any) => {
@@ -37,11 +37,11 @@ const onRender = (scene:any) => {
     var deltaTimeInMillis = scene.getEngine().getDeltaTime();
     const rpm = 10;
     box.rotation.y += ((rpm / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000));
-    console.log("1",camera.beta);
+    // console.log("1",camera.beta);
   }
 }
+ {/* <SceneComponent antialias={true}     onSceneReady={onSceneReady} id='my-canvas' onRender={onRender} renderChildrenWhenReady></SceneComponent> */}
 export default () => (
-    <div>
-      <BabylonScene antialias onSceneReady={onSceneReady} onRender={onRender} id='my-canvas' />
-    </div>
+  <BabylonScene antialias={true}  adaptToDeviceRatio={true}   onSceneReady={onSceneReady} id='my-canvas' onRender={onRender} />
+     
 )

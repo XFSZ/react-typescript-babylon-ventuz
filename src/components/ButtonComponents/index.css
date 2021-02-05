@@ -1,0 +1,40 @@
+.mainbutton{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.childButtonCol{
+    /* width: 100%;
+    height: 100%; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.childButtonRow{
+    /* width: 100%;
+    height: 100%; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+:root {
+    --ion-color-new: #92949c1f !important;
+    --ion-color-new-rgb: 146, 148, 156;
+    --ion-color-new-contrast: #ffffff;
+    --ion-color-new-contrast-rgb: 255,255,255;
+    --ion-color-new-shade: #808289;
+    --ion-color-new-tint: #9d9fa6;
+  }
+  .ion-color-new {
+    --ion-color-base: var(--ion-color-new);
+    --ion-color-base-rgb: var(--ion-color-new-rgb);
+    --ion-color-contrast: var(--ion-color-new-contrast);
+    --ion-color-contrast-rgb: var(--ion-color-new-contrast-rgb);
+    --ion-color-shade: var(--ion-color-new-shade);
+    --ion-color-tint: var(--ion-color-new-tint);
+  }

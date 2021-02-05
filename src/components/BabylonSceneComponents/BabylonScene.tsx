@@ -1,9 +1,9 @@
-// import  BABYLON from 'babylonjs';
 import { Engine, Scene } from '@babylonjs/core'
-//import * as BABYLON from '@babylonjs/core'
 import  React ,{useRef,useEffect} from 'react';
 import "@babylonjs/loaders/glTF";
+import './index.css'
 export default (props :any) => {
+
   const reactCanvas = useRef(null);
   const { antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, ...rest } = props;
   useEffect(() => {
@@ -12,10 +12,13 @@ export default (props :any) => {
           const scene = new Scene(engine, sceneOptions);
           if (scene.isReady()) {
               props.onSceneReady(scene)
+        
           } else {
-              scene.onReadyObservable.addOnce(scene => props.onSceneReady(scene));
+              scene.onReadyObservable.addOnce(scene => {props.onSceneReady(scene); });
           }
+         
           engine.runRenderLoop(() => {
+             scene.getEngine().resize();
               if (typeof onRender === 'function') {
                   onRender(scene);
               }
@@ -34,8 +37,8 @@ export default (props :any) => {
               }
           }
       }
-  }, [reactCanvas])
+  }, [adaptToDeviceRatio, antialias, engineOptions, onRender, props, reactCanvas, sceneOptions])
   return (
-      <canvas ref={reactCanvas} {...rest} />
+      <canvas width='100%' height='100%' ref={reactCanvas} {...rest}  />
   );
 }

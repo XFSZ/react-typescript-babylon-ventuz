@@ -1274,10 +1274,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@ionic/core@5.5.2":
-  version "5.5.2"
-  resolved "https://registry.npm.taobao.org/@ionic/core/download/@ionic/core-5.5.2.tgz#6a2107236ca69c149d55ac99a9aa0ca716e973de"
-  integrity sha1-aiEHI2ymnBSdVayZqaoMpxbpc94=
+"@ionic/core@5.5.4":
+  version "5.5.4"
+  resolved "https://registry.npm.taobao.org/@ionic/core/download/@ionic/core-5.5.4.tgz#7fc586e074e85d446cc595a67e625f77d00d708c"
+  integrity sha1-f8WG4HToXURsxZWmfmJfd9ANcIw=
   dependencies:
     ionicons "^5.1.2"
     tslib "^1.10.0"
@@ -1299,12 +1299,12 @@
   dependencies:
     tslib "*"
 
-"@ionic/react@^5.5.2":
-  version "5.5.2"
-  resolved "https://registry.npm.taobao.org/@ionic/react/download/@ionic/react-5.5.2.tgz#18dc56ec75d9dcee765c30028e265661e04a191e"
-  integrity sha1-GNxW7HXZ3O52XDACjiZWYeBKGR4=
+"@ionic/react@^5.5.4":
+  version "5.5.4"
+  resolved "https://registry.npm.taobao.org/@ionic/react/download/@ionic/react-5.5.4.tgz#2d21a452fa8895bb757997efb32dcff77e972112"
+  integrity sha1-LSGkUvqIlbt1eZfvsy3P936XIRI=
   dependencies:
-    "@ionic/core" "5.5.2"
+    "@ionic/core" "5.5.4"
     ionicons "^5.1.2"
     tslib "*"
 
