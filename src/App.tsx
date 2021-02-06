@@ -12,8 +12,7 @@ import {
   IonTabs
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import WebSocketServer from './utils/WebSocketTool';
-import {WebSocketServerContext} from './utils/ConstContext';
+
 import { ellipse, square, triangle } from 'ionicons/icons';
 import Main from './pages/Main/index' 
 /* Core CSS required for Ionic components to work properly */
@@ -37,21 +36,13 @@ import './theme/variables.css';
 
 const App: React.FC<{}> = () =>{
  // const webSocketServerContext = useContext(WebSocketServerContext)
-  const [webSocketServer , setWebSocketServer] = useState({} as WebSocketServer);
-useEffect(()=>{
-const socket = new WebSocketServer("192.168.0.11","4649")
-setWebSocketServer(socket)
-},[])
+
  return (
-   <div>
-   <WebSocketServerContext.Provider value={webSocketServer}>
    <IonApp>
    <IonContent>
    <Main></Main>
    </IonContent>
   </IonApp>
-  </WebSocketServerContext.Provider>
-   </div>
  )
 };
 

@@ -2,6 +2,7 @@
   export default  class WebSocketServer  {
     ip:string ="";
     port :string="";
+    msg:string="ip:port";
     constructor(ip:string="192.168.0.11",port:string="4649"){
       this.ip = ip
       this.port = port
@@ -98,15 +99,8 @@
      this.websocket.send( JSON.stringify(sendMessageStr))
     }
      writeToScreen (message:any) {
+      this.msg = message;
      console.log(message)
     }
 
-  //   useEffect(() => {
-  //   doWebSocket();
-  // });
-    //doWebSocket ();
-  //    return (
-  //   <>
-  //   </>
-  // );
 }

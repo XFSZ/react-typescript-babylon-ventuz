@@ -1,21 +1,10 @@
-import React, { useEffect, useRef, useCallback, useContext } from "react";
-import {
-  IonApp,
-  IonButton,
-  IonContent,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-} from "@ionic/react";
+import React, { useEffect, useRef, useCallback, useContext,useState } from "react";
 import "./index.css";
 import { WebSocketServerContext } from "../../utils/ConstContext";
 import BabylonScene from "../../components/BabylonSceneComponents/index";
 import ButtonComponents from "../../components/ButtonComponents/index";
-
-
+import WebSocketServer from '../../utils/WebSocketTool';
+import MsgLabel from '../../components/Label/index'
 const Main: React.FC = () => {
 //   const context = useContext(WebSocketServerContext);
 //   const onHandleClick = () => {
@@ -25,9 +14,20 @@ const Main: React.FC = () => {
 //       context.sendMessage("hello", { btnEvent: 1 });
 //     }
 //   };
+const [webSocketServer , setWebSocketServer] = useState({} as WebSocketServer);
+useEffect(()=>{
+  const socket = new WebSocketServer("192.168.0.11","4649")
+  setWebSocketServer(socket)
+},[])
+const addWebSocket = (ip:string,port:string) => {
+  const socket = new WebSocketServer(ip,port)
+  setWebSocketServer(socket)
+}
+
   return (
+    <WebSocketServerContext.Provider value={webSocketServer}>
     <div className="container">
-      {/* <div className="content">img</div> */}
+      <MsgLabel addWebSocket={(ip:string,port:string)=>addWebSocket(ip,port)}></MsgLabel>
       <div className="content">
         <div className="btn">
           <ButtonComponents name="ok"></ButtonComponents>
@@ -37,6 +37,7 @@ const Main: React.FC = () => {
         </div>
       </div>
     </div>
+    </WebSocketServerContext.Provider>
   );
 };
 
