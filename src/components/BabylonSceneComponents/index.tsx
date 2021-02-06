@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{memo} from 'react';
 import { ArcRotateCamera, Vector3, HemisphericLight, MeshBuilder,SceneLoader } from '@babylonjs/core';
 import "@babylonjs/loaders/glTF";
 import './index.css'
@@ -41,7 +41,6 @@ const onRender = (scene:any) => {
   }
 }
  {/* <SceneComponent antialias={true}     onSceneReady={onSceneReady} id='my-canvas' onRender={onRender} renderChildrenWhenReady></SceneComponent> */}
-export default () => (
+export default memo(() => (
   <BabylonScene antialias={true}  adaptToDeviceRatio={true}   onSceneReady={onSceneReady} id='my-canvas' onRender={onRender} />
-     
-)
+))

@@ -1,11 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
-import { WebSocketServerContext } from "../../utils/ConstContext";
+import React, { useState } from "react";
 import {
   IonModal,
   IonButton,
@@ -17,19 +10,20 @@ import {
 } from "@ionic/react";
 import "./index.css";
 interface ContainerProps {
-    addWebSocket :any ;
-  }
+  addWebSocket: any;
+  msg: any;
+}
 
-const MsgLabel: React.FC<ContainerProps> = (props:ContainerProps) => {
+const MsgLabel: React.FC<ContainerProps> = (props: ContainerProps) => {
   const [showModal, setShowModal] = useState(false);
-  const context = useContext(WebSocketServerContext);
   const [ip, setIp] = useState<string>();
   const [port, setPort] = useState<string>();
+
   const onHandleClick = () => {
-    console.log(context);
     setShowModal(false);
-    props.addWebSocket(ip,port);
+    props.addWebSocket(ip, port);
   };
+
   return (
     <div className="msglabel">
       <IonModal
@@ -58,7 +52,7 @@ const MsgLabel: React.FC<ContainerProps> = (props:ContainerProps) => {
         <IonButton onClick={() => onHandleClick()}>确认</IonButton>
       </IonModal>
       <IonText onClick={() => setShowModal(true)} color="primary">
-        <p >{context.msg}</p>
+        <p>{props.msg}</p>
       </IonText>
     </div>
   );

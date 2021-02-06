@@ -97,6 +97,7 @@
         transData:transData,
       }
      this.websocket.send( JSON.stringify(sendMessageStr))
+     this.writeToScreen(sendMessageStr)
     }
      writeToScreen (message:any) {
       this.msg = message;

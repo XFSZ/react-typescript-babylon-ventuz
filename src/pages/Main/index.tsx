@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useContext,useState } from "react";
+import React, { useEffect, useRef, useCallback, useContext,useState,memo } from "react";
 import "./index.css";
 import { WebSocketServerContext } from "../../utils/ConstContext";
 import BabylonScene from "../../components/BabylonSceneComponents/index";
@@ -23,14 +23,17 @@ const addWebSocket = (ip:string,port:string) => {
   const socket = new WebSocketServer(ip,port)
   setWebSocketServer(socket)
 }
-
+const [msg , setMsg] = useState<string>("ip:port");
+const getMsg = (msg:string) => {
+setMsg(msg);
+}
   return (
     <WebSocketServerContext.Provider value={webSocketServer}>
     <div className="container">
-      <MsgLabel addWebSocket={(ip:string,port:string)=>addWebSocket(ip,port)}></MsgLabel>
+      <MsgLabel msg={msg} addWebSocket={(ip:string,port:string)=>addWebSocket(ip,port)}></MsgLabel>
       <div className="content">
         <div className="btn">
-          <ButtonComponents name="ok"></ButtonComponents>
+          <ButtonComponents getMsg={(msg:string)=>getMsg(msg)} name="ok"></ButtonComponents>
         </div>
         <div className="babylon">
           <BabylonScene />
