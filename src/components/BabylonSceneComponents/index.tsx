@@ -40,7 +40,7 @@ const onRender = (scene:any) => {
     // console.log("1",camera.beta);
   }
 }
- {/* <SceneComponent antialias={true}     onSceneReady={onSceneReady} id='my-canvas' onRender={onRender} renderChildrenWhenReady></SceneComponent> */}
+ /* <SceneComponent antialias={true}     onSceneReady={onSceneReady} id='my-canvas' onRender={onRender} renderChildrenWhenReady></SceneComponent> */
 export default memo(() => (
   <BabylonScene antialias={true}  adaptToDeviceRatio={true}   onSceneReady={onSceneReady} id='my-canvas' onRender={onRender} />
 ))
