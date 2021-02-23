@@ -24,19 +24,24 @@ const addWebSocket = (ip:string,port:string) => {
   setWebSocketServer(socket)
 }
 const [msg , setMsg] = useState<string>("ip:port");
+const [sceneId , setSceneId] = useState<string>("3dscene");
 const getMsg = (msg:string) => {
 setMsg(msg);
+}
+
+const  changeScene = (sceneId:string)=>{
+  setSceneId(sceneId)
 }
   return (
     <WebSocketServerContext.Provider value={webSocketServer}>
     <div className="container">
-      <MsgLabel msg={msg} addWebSocket={(ip:string,port:string)=>addWebSocket(ip,port)}></MsgLabel>
+      <MsgLabel msg={msg}  addWebSocket={(ip:string,port:string)=>addWebSocket(ip,port)}></MsgLabel>
       <div className="content">
         <div className="btn">
-          <ButtonComponents getMsg={(msg:string)=>getMsg(msg)} name="ok"></ButtonComponents>
+          <ButtonComponents getMsg={(msg:string)=>getMsg(msg)} changeScene={(sceneId:string)=>changeScene(sceneId)} name="button"></ButtonComponents>
         </div>
         <div className="babylon">
-          <BabylonScene />
+          <BabylonScene getMsg={(msg:string)=>getMsg(msg)} sceneId={sceneId} />
         </div>
       </div>
     </div>

@@ -10,8 +10,9 @@ import { buttonName } from "../../utils/ConstContext";
 interface ContainerProps {
   name: string;
   getMsg: any;
+  changeScene:any;
 }
-const ButtonComponents: React.FC<ContainerProps> = ({ name, getMsg }) => {
+const ButtonComponents: React.FC<ContainerProps> = ({ name, getMsg,changeScene }) => {
   const keys = Object.keys(buttonName);
   const context = useContext(WebSocketServerContext);
   const [states, setStates] = useState({
@@ -56,6 +57,7 @@ const ButtonComponents: React.FC<ContainerProps> = ({ name, getMsg }) => {
           [event.code]: !states[event.code],
         });
       } else if (event.num === 11) {
+        changeScene(`${[event.code]}`)
         let changeState: any = {};
         let changeShow: any = {};
         for (let i = 0; i < keys.length; i++) {
@@ -99,6 +101,7 @@ const ButtonComponents: React.FC<ContainerProps> = ({ name, getMsg }) => {
           }
         }
         if(event.code ===buttonName.cloudComputingCenter.code){
+          changeScene(`${[event.code]}`)
           changeState[buttonName.fangshanBase.code]= true
           changeState[buttonName.groundFloorPlan.code] = true
           changeState[buttonName.typicalFloor.code] = true
@@ -154,7 +157,7 @@ const ButtonComponents: React.FC<ContainerProps> = ({ name, getMsg }) => {
         });
       }
     },
-    [context, getMsg, keys, show, states]
+    [changeScene, context, getMsg, keys, show, states]
   );
 
   return (

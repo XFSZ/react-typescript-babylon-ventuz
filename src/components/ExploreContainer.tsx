@@ -23,7 +23,7 @@ const ExploreContainer: React.FC<ContainerProps> = ({ name }) => {
   return (
     <div className="container">
 
-     <BabylonScene />
+     {/* <BabylonScene getMsg /> */}
       <strong onClick={onHandleClick}>{name}</strong>
       <p>
         Explore{" "}

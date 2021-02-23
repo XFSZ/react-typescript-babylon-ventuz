@@ -17,6 +17,8 @@ export const buttonName:any  = {
     "waterWayBack":{code:"waterWayBack",name:"返回",num:1121},
     "electroCircuitBack":{code:"electroCircuitBack",name:"返回",num:1131},
     "webWayBack":{code:"webWayBack",name:"返回",num:1141},
-    "back":{code:"back",name:"返回",num:11551},
-    
+    "back":{code:"back",name:"返回",num:11551}, 
+}
+export const threeDName:any  = {
+      
 }

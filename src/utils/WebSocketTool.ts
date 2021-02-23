@@ -3,6 +3,7 @@
     ip:string ="";
     port :string="";
     msg:string="ip:port";
+    // 测试ip  192.168.0.79
     constructor(ip:string="192.168.0.11",port:string="4649"){
       this.ip = ip
       this.port = port
