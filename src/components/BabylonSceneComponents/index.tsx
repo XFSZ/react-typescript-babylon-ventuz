@@ -4,7 +4,9 @@ import {
   Vector3,
   HemisphericLight,
   MeshBuilder,
-  SceneLoader,
+  PointerEventTypes,
+  PickingInfo,
+  PointerInfo,
 } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
 import "./index.css";
@@ -14,21 +16,26 @@ import { WebSocketServerContext } from "../../utils/ConstContext";
 import "@babylonjs/inspector"
 import "@babylonjs/core/Debug/debugLayer"
 interface Props {
-  getMsg: any;
   sceneId: string;
 }
 // export default memo(() => (
 //   <BabylonScene antialias={true}  adaptToDeviceRatio={true}   onSceneReady={onSceneReady} id='my-canvas' onRender={onRender} />
 // ))
-const ThreeDScene = memo<Props>(({ getMsg, sceneId }) => {
+let offsetX = 0;
+let offsetY= 0;
+let isTouch = false
+const ThreeDScene = memo<Props>(( { sceneId }) => {
   const context = useContext(WebSocketServerContext);
+
+  
   let box: any;
   let camera: any;
   const onSceneReady = (scene: any) => {
     // This creates and positions a free camera (non-mesh)
-    scene.debugLayer.show({
-      overlay: true,//覆盖模式打开
-  });
+  //   scene.debugLayer.show({
+  //     overlay: true,//覆盖模式打开
+  // });
+  
     camera = new ArcRotateCamera(
       "camera1",
       0,
@@ -51,42 +58,53 @@ const ThreeDScene = memo<Props>(({ getMsg, sceneId }) => {
     // Move the box upward 1/2 its height
     box.position.y = 1;
     // Our built-in 'ground' shape.
-    MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+    let ground =  MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
     // SceneLoader.Append("./statics/", "BrainStem.gltf", scene, (scene) => {
     //   console.log("ok");
     // });
-  };
-  const onRender = (scene: any) => {
-    if (box !== undefined) {
-      var deltaTimeInMillis = scene.getEngine().getDeltaTime();
-      //const rpm = 10;
-      //box.rotation.y += (rpm / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000);
-      //  console.log("1",camera.beta);
+     // Events
+     let fingerCount = 0
+     scene.onPointerUp = (e:any,pickInfo: PickingInfo, type: PointerEventTypes) => {
+      fingerCount --;
+     if(fingerCount ===0){
+      isTouch =false
+     }
+   
+     }
+     scene.onPointerDown = (e:any,pickInfo: PickingInfo, type: PointerEventTypes) => {
+      fingerCount ++;
+     
+        isTouch =true
+    
+   
     }
-    // getMsg({
-    //   radius: scene.cameras[0].radius,
-    //   alpha: scene.cameras[0].alpha,
-    //   beta: scene.cameras[0].beta,
-    //   target: {
-    //     x: scene.cameras[0].target.x,
-    //     y: scene.cameras[0].target.y,
-    //     z: scene.cameras[0].target.z,
-    //   },
-    //   position: {
-    //     x: scene.cameras[0].position.x,
-    //     y: scene.cameras[0].position.y,
-    //     z: scene.cameras[0].position.z,
-    //   },
-    // });
-    if (context.isOpen) {
-      
+     scene.onPointerMove = (e:any,pickInfo: PickingInfo, type: PointerEventTypes) => {
+      console.log(offsetX,offsetY)
+  
+             if(e.buttons===2){
+             // console.log(e,pickInfo,type)
+            // console.log(e)
+              offsetX = offsetX + e.movementX
+              offsetY =offsetY + e.movementY
+
+             }
+             if(e.pointerType==="touch" && fingerCount ===2){
+              offsetX = offsetX + e.movementX
+              offsetY =offsetY + e.movementY
+
+             }
+
+  }
+  function PointerInfo(pointerInfo:PointerInfo){
+    console.log(isTouch)
+    if (context.isOpen && isTouch) {
       context.sendMessage(`${sceneId}`, {
         radius: scene.cameras[0].radius,
         alpha: scene.cameras[0].alpha,
         beta: scene.cameras[0].beta,
         target: {
-          x: scene.cameras[0].target.x,
-          y: scene.cameras[0].target.y,
+          x: offsetX,
+          y: offsetY,
           z: scene.cameras[0].target.z,
         },
         position: {
@@ -96,6 +114,23 @@ const ThreeDScene = memo<Props>(({ getMsg, sceneId }) => {
         },
       });
     }
+  }
+  scene.onPointerObservable.add(PointerInfo)
+  };
+  const onRender = (scene: any) => {
+    //if (box !== undefined) {
+     // var deltaTimeInMillis = scene.getEngine().getDeltaTime();
+      //const rpm = 10;
+      //box.rotation.y += (rpm / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000);
+      //  console.log("1",camera.beta);
+   // }
+    //console.log(scene.pointerX)
+    // target: {
+    //   x: scene.cameras[0].target.x,
+    //   y: scene.cameras[0].target.y,
+    //   z: scene.cameras[0].target.z,
+    // },
+
   };
 
   return (

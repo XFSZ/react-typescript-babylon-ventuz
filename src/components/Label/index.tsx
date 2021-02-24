@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {memo, useState } from "react";
 import {
   IonModal,
   IonButton,
@@ -14,7 +14,7 @@ interface ContainerProps {
   msg: any;
 }
 
-const MsgLabel: React.FC<ContainerProps> = (props: ContainerProps) => {
+const MsgLabel= memo<ContainerProps> ( (props: ContainerProps) => {
   const [showModal, setShowModal] = useState(false);
   const [ip, setIp] = useState<string>();
   const [port, setPort] = useState<string>();
@@ -56,6 +56,6 @@ const MsgLabel: React.FC<ContainerProps> = (props: ContainerProps) => {
       </IonText>
     </div>
   );
-};
+});
 
 export default MsgLabel;

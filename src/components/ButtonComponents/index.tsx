@@ -1,8 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useState,
-} from "react";
+import React, {memo, useCallback, useContext, useState } from "react";
 import { IonButton } from "@ionic/react";
 import "./index.css";
 import { WebSocketServerContext } from "../../utils/ConstContext";
@@ -10,11 +6,16 @@ import { buttonName } from "../../utils/ConstContext";
 interface ContainerProps {
   name: string;
   getMsg: any;
-  changeScene:any;
+  changeScene: any;
 }
-const ButtonComponents: React.FC<ContainerProps> = ({ name, getMsg,changeScene }) => {
+const ButtonComponents = memo<ContainerProps>(({
+  name,
+  getMsg,
+  changeScene,
+}) => {
   const keys = Object.keys(buttonName);
   const context = useContext(WebSocketServerContext);
+  const [delay, setDelay] = useState(false);
   const [states, setStates] = useState({
     [buttonName.globalBase.code]: false,
     [buttonName.fangshanBase.code]: true,
@@ -50,114 +51,159 @@ const ButtonComponents: React.FC<ContainerProps> = ({ name, getMsg,changeScene }
 
   const onHandleClick = useCallback(
     (event: any) => {
-      if (event.num === 1) {
-        setStates({
-          ...states,
-          [buttonName.fangshanBase.code]: true,
-          [event.code]: !states[event.code],
-        });
-      } else if (event.num === 11) {
-        changeScene(`${[event.code]}`)
-        let changeState: any = {};
-        let changeShow: any = {};
-        for (let i = 0; i < keys.length; i++) {
-          const value = keys[i];
-          if (Math.floor(buttonName[value.toString()].num / 10) === event.num) {
-            const newCode = buttonName[value.toString()].code;
-            const eventCode = event.code;
-            changeShow[newCode.toString()] = true;
-            changeState[newCode.toString()] = true
-            changeState[eventCode.toString()] = false
-            changeState[buttonName.globalBase.code] = true
+      if (!delay) {
+        setDelay(true); // 点按延迟
+        setTimeout(() => {
+          setDelay(false);
+        }, 2000);
+        // 全国
+        if (event.code === buttonName.globalBase.code) {
+          setStates({
+            ...states,
+            [buttonName.fangshanBase.code]: true,
+            [event.code]: !states[event.code],
+          });
+          // 房山
+        } else if (event.code === buttonName.fangshanBase.code) {
+          changeScene(`${[event.code]}`);
+          let changeState: any = {};
+          let changeShow: any = {};
+          for (let i = 0; i < keys.length; i++) {
+            const value = keys[i];
+            if (
+              Math.floor(buttonName[value.toString()].num / 10) === event.num
+            ) {
+              const newCode = buttonName[value.toString()].code;
+              const eventCode = event.code;
+              changeShow[newCode.toString()] = true;
+              changeState[newCode.toString()] = true;
+              changeState[eventCode.toString()] = false;
+              changeState[buttonName.globalBase.code] = true;
+            }
           }
+          if (states[buttonName.fangshanBase.code] === true) {
+            changeShow[buttonName.groundFloorPlan.code] = false;
+            changeShow[buttonName.typicalFloor.code] = false;
+            changeShow[buttonName.dieselGeneratesRoom.code] = false;
+            changeShow[buttonName.waterElectroWeb.code] = false;
+          }
+          setStates({
+            ...states,
+            ...changeState,
+          });
+          setShow({ ...show, ...changeShow });
         }
-        if(states[buttonName.fangshanBase.code] ===true){
-          changeShow[buttonName.groundFloorPlan.code] = false
-          changeShow[buttonName.typicalFloor.code] = false
-          changeShow[buttonName.dieselGeneratesRoom.code] = false
-          changeShow[buttonName.waterElectroWeb.code] = false
-        }
-        setStates({
-          ...states,
-     ...changeState
-        });
-        setShow({ ...show, ...changeShow });
-      } else {
-        let changeState: any = {};
-        let changeShow: any = {};
+        // 房山子项 
+        else {
+          let changeState: any = {};
+          let changeShow: any = {};
+          // 水 电 网 与 云计算中心 互斥
+          if(event.code ===buttonName.waterWay.code ||event.code ===buttonName.electroCircuit.code||event.code ===buttonName.webWay.code ){
+            //水 电 网三者互斥
+            if(event.code ===buttonName.waterWay.code){
+              changeState[buttonName.electroCircuit.code] = true;
+              changeState[buttonName.webWay.code] = true;
+            }
+            if(event.code ===buttonName.electroCircuit.code){
+              changeState[buttonName.waterWay.code] = true;
+              changeState[buttonName.webWay.code] = true;
+            }
+            if(event.code ===buttonName.webWay.code){
+              changeState[buttonName.waterWay.code] = true;
+              changeState[buttonName.electroCircuit.code] = true;
+            }
+            changeShow[buttonName.cloudComputingCenter.code] = false
+            changeShow[buttonName.waterWayBack.code] = true;
+          }
+         // 水电网返回 与 云计算中心 互斥
+          if(event.code === buttonName.waterWayBack.code){
+            changeShow[buttonName.cloudComputingCenter.code] = true;
+          }
+          
+          //  云计算中心 与 水 电 网 互斥
+          if (event.code === buttonName.cloudComputingCenter.code) {
+            changeScene(`${[event.code]}`);
+            changeState[buttonName.fangshanBase.code] = true;
+            changeState[buttonName.groundFloorPlan.code] = true;
+            changeState[buttonName.typicalFloor.code] = true;
+            changeState[buttonName.dieselGeneratesRoom.code] = true;
 
-        if(event.code ===buttonName.waterWay.code ||event.code ===buttonName.electroCircuit.code||event.code ===buttonName.webWay.code ){
-          changeShow[buttonName.cloudComputingCenter.code] = false
-        }
-        if(event.code ===buttonName.webWayBack.code ||event.code ===buttonName.waterWayBack.code||event.code ===buttonName.electroCircuitBack.code ){
-          if(show[buttonName.webWayBack.code] === true && show[buttonName.waterWayBack.code] === false && show[buttonName.electroCircuitBack.code] === false){
-            changeShow[buttonName.cloudComputingCenter.code] = true
+            changeShow[buttonName.waterWay.code] = false;
+            changeShow[buttonName.electroCircuit.code] = false;
+            changeShow[buttonName.webWay.code] = false;
           }
-          if(show[buttonName.webWayBack.code] === false && show[buttonName.waterWayBack.code] === true && show[buttonName.electroCircuitBack.code] === false){
-            changeShow[buttonName.cloudComputingCenter.code] = true
-          }
-          if(show[buttonName.webWayBack.code] === false && show[buttonName.waterWayBack.code] === false && show[buttonName.electroCircuitBack.code] === true){
-            changeShow[buttonName.cloudComputingCenter.code] = true
-          }
-        }
-        if(event.code ===buttonName.cloudComputingCenter.code){
-          changeScene(`${[event.code]}`)
-          changeState[buttonName.fangshanBase.code]= true
-          changeState[buttonName.groundFloorPlan.code] = true
-          changeState[buttonName.typicalFloor.code] = true
-          changeState[buttonName.dieselGeneratesRoom.code] = true
-        
-          changeShow[buttonName.waterWay.code] = false
-          changeShow[buttonName.electroCircuit.code] = false
-          changeShow[buttonName.webWay.code] = false
-        }
 
-        if(event.code ===buttonName.waterElectroWeb.code){
-          changeShow[buttonName.groundFloorPlan.code] = false
-          changeShow[buttonName.typicalFloor.code] = false
-          changeShow[buttonName.dieselGeneratesRoom.code] = false
-        }
-        if(event.code ===buttonName.groundFloorPlan.code ||event.code ===buttonName.typicalFloor.code||event.code ===buttonName.dieselGeneratesRoom.code ){
-          changeShow[buttonName.waterElectroWeb.code] = false
-          changeState[event.code] = false
-          changeState[buttonName.cloudComputingCenter.code] = true
-        }
-        if(event.code ===buttonName.groundFloorPlan.code ||event.code ===buttonName.typicalFloor.code||event.code ===buttonName.dieselGeneratesRoom.code ){
-          changeShow[buttonName.waterElectroWeb.code] = false
-          changeState[event.code] = false
-          changeState[buttonName.cloudComputingCenter.code] = true
-        }
-        for (let i = 0; i < keys.length; i++) {
-          const value = keys[i];
-          if (Math.floor(buttonName[value.toString()].num / 10) === event.num) {
-            const newCode = buttonName[value.toString()].code;
-            const eventCode = event.code;
-            changeShow[newCode.toString()] = true;
-            changeState[eventCode.toString()] = false;
+          // 水电网 与 三层互斥
+          if (event.code === buttonName.waterElectroWeb.code) {
+            changeShow[buttonName.groundFloorPlan.code] = false;
+            changeShow[buttonName.typicalFloor.code] = false;
+            changeShow[buttonName.dieselGeneratesRoom.code] = false;
           }
-          if (event.num % buttonName[value.toString()].num === 1 && Math.floor( event.num/ buttonName[value.toString()].num ) === 10) {
-            const newCode = buttonName[value.toString()].code;
-            const eventCode = event.code;
-            changeState[newCode.toString()] = true;
-            changeShow[newCode.toString()] = true;
-            changeShow[eventCode.toString()] = false;
+          // 三层与 水电网 互斥
+          if (
+            event.code === buttonName.groundFloorPlan.code ||
+            event.code === buttonName.typicalFloor.code ||
+            event.code === buttonName.dieselGeneratesRoom.code
+          ) {
+            // 三层 互斥
+              if(event.code ===buttonName.groundFloorPlan.code){
+              changeState[buttonName.typicalFloor.code] = true;
+              changeState[buttonName.dieselGeneratesRoom.code] = true;
+            }
+            if(event.code ===buttonName.typicalFloor.code){
+              changeState[buttonName.groundFloorPlan.code] = true;
+              changeState[buttonName.dieselGeneratesRoom.code] = true;
+            }
+            if(event.code ===buttonName.dieselGeneratesRoom.code){
+              changeState[buttonName.groundFloorPlan.code] = true;
+              changeState[buttonName.typicalFloor.code] = true;
+            }
+
+            changeShow[buttonName.waterElectroWeb.code] = false;
+            changeState[event.code] = false;
+            changeState[buttonName.cloudComputingCenter.code] = true;
           }
+
+
+          // 关闭子节点
+          for (let i = 0; i < keys.length; i++) {
+            const value = keys[i];
+            if (
+              Math.floor(buttonName[value.toString()].num / 10) === event.num
+            ) {
+              const newCode = buttonName[value.toString()].code;
+              const eventCode = event.code;
+              changeShow[newCode.toString()] = true;
+              changeState[eventCode.toString()] = false;
+            }
+            if (
+              event.num % buttonName[value.toString()].num === 1 &&
+              Math.floor(event.num / buttonName[value.toString()].num) === 10
+            ) {
+              const newCode = buttonName[value.toString()].code;
+              const eventCode = event.code;
+              changeState[newCode.toString()] = true;
+              changeShow[newCode.toString()] = true;
+              changeShow[eventCode.toString()] = false;
+            }
+          }
+
+          setStates({
+            ...states,
+            ...changeState,
+          });
+          setShow({ ...show, ...changeShow });
         }
- 
-        setStates({
-          ...states,
-          ...changeState,
-        });
-        setShow({ ...show, ...changeShow });
-      }
-      getMsg(`${[event.code]}: ${states[event.code]}`);
-      if (context.isOpen) {
-        context.sendMessage(`${event.code}`, {
-          [event.code]: states[event.code],
-        });
+        getMsg(`${[event.code]}: ${states[event.code]}`);
+        if (context.isOpen) {
+          console.log({[event.code]: states[event.code]})
+          context.sendMessage(`${event.code}`, {
+            [event.code]: states[event.code],
+          });
+        }
       }
     },
-    [changeScene, context, getMsg, keys, show, states]
+    [changeScene, context, delay, getMsg, keys, show, states]
   );
 
   return (
@@ -182,8 +228,9 @@ const ButtonComponents: React.FC<ContainerProps> = ({ name, getMsg,changeScene }
         >
           {buttonName.fangshanBase.name}
         </IonButton>
-        <div className="childButtonRow">
+        
           <div className="childButtonCol">
+          <div className="childButtonRow">
             {show[buttonName.waterWay.code] ? (
               <IonButton
                 disabled={!states[buttonName.waterWay.code]}
@@ -197,21 +244,7 @@ const ButtonComponents: React.FC<ContainerProps> = ({ name, getMsg,changeScene }
             ) : (
               <></>
             )}
-            {show[buttonName.waterWayBack.code] ? (
-              <IonButton
-                onClick={() => {
-                  onHandleClick(buttonName.waterWayBack);
-                }}
-                color="new"
-              >
-                {buttonName.waterWayBack.name}
-              </IonButton>
-            ) : (
-              <></>
-            )}
-          </div>
-          <div className="childButtonCol">
-            {show[buttonName.electroCircuit.code] ? (
+                        {show[buttonName.electroCircuit.code] ? (
               <IonButton
                 disabled={!states[buttonName.electroCircuit.code]}
                 onClick={() => {
@@ -224,21 +257,7 @@ const ButtonComponents: React.FC<ContainerProps> = ({ name, getMsg,changeScene }
             ) : (
               <></>
             )}
-            {show[buttonName.electroCircuitBack.code] ? (
-              <IonButton
-                onClick={() => {
-                  onHandleClick(buttonName.electroCircuitBack);
-                }}
-                color="new"
-              >
-                {buttonName.electroCircuitBack.name}
-              </IonButton>
-            ) : (
-              <></>
-            )}
-          </div>
-          <div className="childButtonCol">
-            {show[buttonName.webWay.code] ? (
+                        {show[buttonName.webWay.code] ? (
               <IonButton
                 disabled={!states[buttonName.webWay.code]}
                 onClick={() => {
@@ -251,19 +270,21 @@ const ButtonComponents: React.FC<ContainerProps> = ({ name, getMsg,changeScene }
             ) : (
               <></>
             )}
-            {show[buttonName.webWayBack.code] ? (
+
+          </div>
+            {show[buttonName.waterWayBack.code] ? (
               <IonButton
                 onClick={() => {
-                  onHandleClick(buttonName.webWayBack);
+                  onHandleClick(buttonName.waterWayBack);
                 }}
                 color="new"
               >
-                {buttonName.webWayBack.name}
+                {buttonName.waterWayBack.name}
               </IonButton>
             ) : (
               <></>
             )}
-          </div>
+
         </div>
       </div>
       <div className="childButtonCol">
@@ -349,6 +370,6 @@ const ButtonComponents: React.FC<ContainerProps> = ({ name, getMsg,changeScene }
       </div>
     </div>
   );
-};
+          });
 
 export default ButtonComponents;

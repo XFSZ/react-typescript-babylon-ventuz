@@ -41,7 +41,7 @@ const  changeScene = (sceneId:string)=>{
           <ButtonComponents getMsg={(msg:string)=>getMsg(msg)} changeScene={(sceneId:string)=>changeScene(sceneId)} name="button"></ButtonComponents>
         </div>
         <div className="babylon">
-          <BabylonScene getMsg={(msg:string)=>getMsg(msg)} sceneId={sceneId} />
+          <BabylonScene  sceneId={sceneId} />
         </div>
       </div>
     </div>

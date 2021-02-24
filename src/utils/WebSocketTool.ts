@@ -67,11 +67,11 @@
          buttonName:"scence",
          transData:cameraData,
        }
-       console.log(sendMessageStr)
+    //   console.log(sendMessageStr)
       this.websocket.send( JSON.stringify(sendMessageStr))
     }
      onMessage (event:any) {
-      console.log(event);
+   //   console.log(event);
       
       this.writeToScreen ('<span style="color: blue;">RESPONSE: ' + event.data + '</span>');
       this.websocket.send (event.timeStamp);
@@ -102,7 +102,7 @@
     }
      writeToScreen (message:any) {
       this.msg = message;
-     console.log(message)
+     //console.log(message)
     }
 
 }
